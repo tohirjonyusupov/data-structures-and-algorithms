@@ -1,16 +1,53 @@
 class Graph {
   constructor() {
     this.neighbours = {
-      A: ["B", "C", "D"],
-      B: ["A"],
-      C: ["A"],
-      D: ["A", "E", "F"],
+      // A: ["B", "C", "D"],
+      // B: ["A"],
+      // C: ["A"],
+      // D: ["A", "E", "F"],
+      // E: ["D", "F"],
+      // F: ["E", "D", "G"],
+      // G: ["F", "H", "I"],
+      // H: ["G"],
+      // I: ["G"],
+      A: ["B"],
+      B: ["C"],
+      C: ["E"],
       E: ["D", "F"],
-      F: ["E", "D", "G"],
-      G: ["F", "H", "I"],
-      H: ["G"],
-      I: ["G"],
+      D: ["B"],
+      F: [""],
     };
+  }
+
+  hasCycle() {
+    const status = new Map();
+    for (let neighbour in this.neighbours) {
+      status.set(neighbour, -1);
+    }
+    const stack = [["A", 0]];
+    status.set("A", 0);
+
+    while (stack.length > 0) {
+      let [current, visitedNeighbour] = stack.at(-1);
+
+      if (status.get(current, -1)) {
+        status.set(current, 0);
+      }
+      let neighbours = this.neighbours[current];
+      if (visitedNeighbour < neighbours.length) {
+        let neighbour = neighbours[visitedNeighbour];
+        stack[stack.length - 1] = [current, visitedNeighbour + 1];
+        if (status.get(neighbour) === -1) {
+          stack.push([neighbour, 0]);
+        } else if (status.get(neighbour) === 0) {
+          return `Cycle detected, ${current} - ${neighbour}`;
+        }
+      } else {
+        status.set(current, 1);
+        stack.pop();
+      }
+    }
+    return "No cycle";
   }
 
   addVertex(vertex) {
@@ -40,4 +77,4 @@ class Graph {
 }
 
 const graph = new Graph();
-console.log(graph.DFS('A'));
+console.log(graph.hasCycle());
