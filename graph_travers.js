@@ -10,12 +10,18 @@ class Graph {
       // G: ["F", "H", "I"],
       // H: ["G"],
       // I: ["G"],
+      // A: ["B"],
+      // B: ["C"],
+      // C: ["E"],
+      // E: ["D", "F"],
+      // D: ["B"],
+      // F: [""],
       A: ["B"],
-      B: ["C"],
-      C: ["E"],
-      E: ["D", "F"],
-      D: ["B"],
-      F: [""],
+      B: ["A","C", "D"],
+      C: ["B", "E"],
+      D: ["B", "E"],
+      E: ["C", "D", "F"],
+      F: ["E"]
     };
   }
 
@@ -74,7 +80,26 @@ class Graph {
     }
     return visited;
   }
+
+  detetCycle(){
+    const queue = ["A"]
+    const parentMap = {"A": -1}
+    const visitedList = ["A"]
+
+    while(queue) {
+      let current = queue.shift()
+      for (const neigbour in this.neighbours) {
+        if(!visitedList.includes(current)){
+          visitedList.push(neigbour)
+          queue.push(neigbour)
+          parentMap[neigbour] = current
+        }else if(parentMap[current] != neigbour){
+          return "Cycle detected"
+        }
+      }
+    }
+  }
 }
 
 const graph = new Graph();
-console.log(graph.hasCycle());
+console.log(graph.detetCycle());
