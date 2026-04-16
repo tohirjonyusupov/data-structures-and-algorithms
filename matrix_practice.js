@@ -1,9 +1,10 @@
 class Matrix {
-  constructor(matrix = []) {
-    if (new.target === Matrix) {
-      throw new Error("Cannot instantiate abstract class Matrix directly");
-    }
-    this.matrix = matrix;
+  constructor() {
+    this.matrix = [
+      [1, 2, 3],
+      [4, 5, 6],
+      [7, 8, 9],
+    ];
   }
 
   // add random value to matrix
@@ -56,16 +57,37 @@ class Matrix {
     }
   }
 
-  /**
-   * xxxxx
-   * xyyyx
-   * xytyx
-   * xyyyx
-   * xxxxx
-   */
   printSpiralFormat() {
-    throw new Error("Method 'printSpiralFormat()' must be implemented");
-  }
+    let left = 0;
+    let right = this.matrix[0].length - 1;
+    let top = 0;
+    let bottom = this.matrix.length - 1;
+    let arr = [];
+
+    while (top <= bottom && left <= right) {
+        for (let i = left; i <= right; i++) {
+            arr.push(this.matrix[top][i]);
+        }
+        top++;
+
+        for (let i = top; i <= bottom; i++) {
+            arr.push(this.matrix[i][right]);
+        }
+        right--;
+
+        for (let i = right; i >= left; i--) {
+            arr.push(this.matrix[bottom][i]);
+        }
+        bottom--;
+
+        for (let i = bottom; i >= top; i--) {
+            arr.push(this.matrix[i][left]);
+        }
+        left++;
+    }
+    return arr;
+}
 }
 
-// module.exports = Matrix;
+const g = new Matrix()
+console.log(g.printSpiralFormat());
